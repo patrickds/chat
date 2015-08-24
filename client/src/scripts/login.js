@@ -104,7 +104,7 @@ $(document).ready(function () {
     };
 
     function playAudio() {
-        var audio = new Audio('resources/tururu.mp3');
+        var audio = new Audio('resources/bleep.mp3');
         audio.play();
     };
 
