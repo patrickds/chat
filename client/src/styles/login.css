@@ -1,0 +1,25 @@
+/* 
+	Login
+*/
+
+#login_page {
+	background-color: beige;
+  height: 100%;
+}
+
+#login_page form {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 50%;
+  height: 30%;
+  margin: auto;
+  text-align: center;
+}
+
+#login_label {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 5px;
+}

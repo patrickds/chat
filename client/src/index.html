@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Chat</title>
+	<link rel="stylesheet" href="styles/index.css">
+	<link rel="stylesheet" href="styles/login.css">
+	<link rel="stylesheet" href="styles/chat.css">
+	<link rel="stylesheet" href="styles/message_container.css">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+</head>
+
+<body>
+	<header></header>
+	<section id="pages">
+		<div id="login_page">
+			<form>
+				<h3 id="login_label">Type your name</br></h3>
+				<input id="username_input" type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+				<label id="error_label" class="control-label" autofocus>Invalid username</label>
+			</form>
+		</div>
+		<div id="chat_page">
+			<ul id="messages_list">
+			</ul>
+			<form>
+				<input id="message_input" type="text" class="form-control" placeholder="Message" autocomplete="off">
+			</form>
+		</div>
+	</section>
+	<footer></footer>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>	
+	<script type="text/javascript" src="scripts/login.js"></script>
+</body>
+
+</html>
