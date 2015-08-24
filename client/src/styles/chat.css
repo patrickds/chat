@@ -1,7 +1,3 @@
-/* 
-	Chat 
-*/
-
 #chat_page {
 	background-color: #DDEBD8;
   height: 100%;
@@ -19,7 +15,7 @@
   border-radius: 5px;
   background-color: white;
   overflow: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 #chat_page form {

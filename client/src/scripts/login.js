@@ -15,7 +15,7 @@ $(document).ready(function () {
     chatPage.hide();
     //loginPage.hide();
 
-    loginPage.keydown(function (e) {
+    loginPage.keyup(function (e) {
         if (e.which != ENTER_KEY) return;
 
         var username = $('#username_input').val();
@@ -45,8 +45,6 @@ $(document).ready(function () {
         }
     });
 
-
-
     /* chat */
 
     function initChat(username) {
@@ -57,7 +55,7 @@ $(document).ready(function () {
         chatForm.submit(function () {
             return false;
         });
-
+ 
         socket.on('connect', function () {
             socket.emit('user connected', {
                 user: username
@@ -81,25 +79,39 @@ $(document).ready(function () {
                 msg: message
             });
 
-            messagesList.append('<li class="bubble"><strong>' +
+            messagesList.append('<li tabindex="1" class="bubble"><strong>' +
                 username +
                 ':</strong> ' +
                 message +
                 '</li>'
                 );
-
+            scrollToLastMessage();
             $(this).val('');
         });
 
         socket.on('new message', function (data) {
 
-            messagesList.append('<li class="bubble2"><strong>' +
+            messagesList.append('<li tabindex="1" class="bubble2"><strong>' +
                 data.user +
                 ':</strong> ' +
                 data.msg +
                 '</li>'
                 );
+                
+            playAudio();
+            scrollToLastMessage();
         });
     };
 
+    function playAudio() {
+        var audio = new Audio('resources/tururu.mp3');
+        audio.play();
+    };
+
+    function scrollToLastMessage() {
+        
+        var last = $('#messages_list li').last();
+        messagesList.animate({ scrollTop: last.offset().top}, 0);
+        console.log(last.offset().top);
+    }
 });
