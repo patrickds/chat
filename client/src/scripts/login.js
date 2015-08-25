@@ -1,117 +1,187 @@
 $(document).ready(function () {
 
+    var loginPage = $('#login_page'),
+        errorLabel = $('#error_label'),
+        chatPage = $('#chat_page'),
+        messages = $('#messages');
+
+    var serverUrl = 'http://192.168.10.181:2424';
     var ENTER_KEY = 13;
-    var loginPage = $('#login_page');
-    var loginForm = $('#login_page form');
-    var errorLabel = $('#error_label');
-    var chatPage = $('#chat_page');
-    var messagesList = $('#messages_list');
 
-    loginForm.submit(function () {
-        return false;
-    });
-
-    errorLabel.hide();
-    chatPage.hide();
-    //loginPage.hide();
+    invalidateFormsSubmit();
+    hideWhatShouldBeHidden();
+    
+    /************* login *****************/
 
     loginPage.keyup(function (e) {
         if (e.which != ENTER_KEY) return;
 
         var username = $('#username_input').val();
 
-        var form = $('#login_page form');
+        var loginForm = $('#login_page form');
         if (!validateUsername(username)) {
 
             errorLabel.fadeIn(300);
-            form.addClass('has-error');
+            loginForm.addClass('has-error');
             return;
         }
 
         errorLabel.fadeOut(300);
-        form.removeClass('has-error');
+        loginForm.removeClass('has-error');
 
         initChat(username);
 
         loginPage.fadeOut(1000, function () {
             chatPage.fadeIn(500);
         });
-
-        function validateUsername(username) {
-            if (!username.trim())
-                return false;
-
-            return true;
-        }
     });
+    /************* login *****************/
 
-    /* chat */
-
+    /************* main chat *****************/
     function initChat(username) {
-        var socket = socket = new io('http://192.168.10.181:2424');
-        var chatForm = $('#chat_page form');
+        var socket = socket = new io(serverUrl);
         var messageInput = $('#message_input');
 
-        chatForm.submit(function () {
-            return false;
+        messageInput.keyup(function (e) {
+            if (e.which != ENTER_KEY)
+                return;
+
+            var message = cleanInput($(this).val());
+
+            if (isMessageValid(message)) {
+                var messageData = { user: username, msg: message };
+                socket.emit('message', messageData);
+                addElementIntoChat(buildSentMessage(messageData));
+                resetElement($(this));
+            }
         });
- 
+        /************* main chat *****************/
+        
+        /************* Socket Events *****************/
         socket.on('connect', function () {
-            socket.emit('user connected', {
-                user: username
-            })
+            socket.emit('user connected', { user: username });
         });
 
         socket.on('new user', function (data) {
-            messagesList.append(
-                '<li class="user_connected">' +
-                data.user + ' connected' +
-                '</li>');
+            var notificationData = { notification: 'connected', user: data.user };
+            var notificationElement = buildNotification(notificationData);
+
+            addElementIntoChat(notificationElement);
         });
 
-        messageInput.keydown(function (e) {
-            if (e.which != ENTER_KEY) return;
+        socket.on('user disconnected', function (data) {
+            var notificationData = { notification: 'disconnected', user: data.user };
+            var notificationElement = buildNotification(notificationData);
 
-            var message = $(this).val();
-
-            socket.emit('message', {
-                user: username,
-                msg: message
-            });
-
-            messagesList.append('<li tabindex="1" class="bubble"><strong>' +
-                username +
-                ':</strong> ' +
-                message +
-                '</li>'
-                );
-            scrollToLastMessage();
-            $(this).val('');
+            addElementIntoChat(notificationElement);
         });
 
         socket.on('new message', function (data) {
+            var messageDiv = buildReceivedMessage(data);
 
-            messagesList.append('<li tabindex="1" class="bubble2"><strong>' +
-                data.user +
-                ':</strong> ' +
-                data.msg +
-                '</li>'
-                );
-                
-            playAudio();
-            scrollToLastMessage();
+            addElementIntoChat(messageDiv);
+            notify();
         });
-    };
+        /************* Socket Events *****************/
+    }
 
-    function playAudio() {
-        var audio = new Audio('resources/bleep.mp3');
-        audio.play();
-    };
+    /************* utils functions *****************/
+
+    function validateUsername(username) {
+        if (!username.trim())
+            return false;
+
+        return true;
+    }
+
+    function hideWhatShouldBeHidden() {
+        errorLabel.hide();
+        chatPage.hide();
+        // loginPage.hide();
+    }
+
+    function invalidateFormsSubmit() {
+        $('form').submit(function () { return false; });
+    }
+
+    function resetElement(element) {
+        element.val('');
+    }
+
+    function buildNotification(notificationData) {
+        return $('<li class="notification"/>')
+            .text(notificationData.user + ' ' + notificationData.notification);
+    }
+
+    function buildReceivedMessage(data) {
+        var messageDiv = buildMessage(data);
+        messageDiv.addClass('bubble2');
+
+        return messageDiv;
+    }
+
+    function buildSentMessage(data) {
+        var messageDiv = buildMessage(data);
+        messageDiv.addClass('bubble');
+
+        return messageDiv;
+    }
+
+    function buildMessage(data) {
+        var usernameDiv = $('<span id="username" class="span_block"/>')
+            .text(data.user);
+
+        var messageBodyDiv = $('<span id="message" class="span_block"/>')
+            .text(data.msg);
+
+        return $('<li/>').append(usernameDiv).append(messageBodyDiv);
+    }
+
+    function addElementIntoChat(messageDiv) {
+        messages.append(messageDiv);
+        scrollToLastMessage();
+    }
+
+    function notify() {
+        blinkWindow();
+        bleep();
+    }
+
+    function blinkWindow() {
+        //TODO:
+    }
+
+    function bleep() {
+        if (!document.hasFocus()) {
+            var audio = new Audio('resources/bleep.mp3');
+            audio.play();
+        }
+    }
 
     function scrollToLastMessage() {
-        
-        var last = $('#messages_list li').last();
-        messagesList.animate({ scrollTop: last.offset().top}, 0);
-        console.log(last.offset().top);
+        if (shouldScroll()) {
+            messages[0].scrollTop = messages[0].scrollHeight;
+        }
     }
+
+    function isMessageValid(message) {
+        if (!message.trim())
+            return false;
+        return true;
+    }
+
+    function cleanInput(input) {
+        // return input.replace(/</g, "&lt;").replace(/>/g, "&gt;"); // replace < for html encoded < and so on
+        // return $( $.parseHTML(input)).text(); // remove all invalid chars
+        return input;
+    }
+
+    function shouldScroll() {
+        var tolerance = 100; //TODO: tolerance should be the sum of the two last LI height 
+        var messagesListHeight = messages.height() + messages[messages.length - 1].scrollTop;
+        var distanceFromFirstMessage = messages[0].scrollHeight;
+
+        return distanceFromFirstMessage - tolerance <= messagesListHeight;
+    }
+    /************* utils functions *****************/
 });

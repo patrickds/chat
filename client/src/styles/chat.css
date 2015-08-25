@@ -35,8 +35,31 @@
   list-style-type: none;
 }
 
-.user_connected {
+.span_block{
+  display: block;
+  float: left;
+  clear:both;
+}
+
+#username{
+  font-size: 12px;
+  font-weight: bold;
+  font-family: sans-serif
+}
+
+#message{
+  font-size: 14px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.notification {
   margin: auto;
   width: 100%;
   left:0;
+  clear: both;
+  display: block;
+  text-align: center;
+  font-style: italic;
+  font-size: 14px;
+  font-family: Helvetica, sans-serif;
 }

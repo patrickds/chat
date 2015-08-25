@@ -2,11 +2,12 @@
     background-color: #F2F2F2;
     border-radius: 5px;
     box-shadow: 0 0 6px #B2B2B2;
-    display: inline-block;
+    display: table;
     padding: 10px 18px;
     position: relative;
     vertical-align: top;
-    float: left;   
+    float: left;
+    clear: both;
     margin: 5px 45px 5px 20px; 
 	border-color: #cdecb0;	 
 }
@@ -14,7 +15,7 @@
 .bubble::before {
     background-color: #F2F2F2;
     content: "\00a0";
-    display: block;
+    display: table;
     height: 16px;
     position: absolute;
     top: 11px;
@@ -32,25 +33,25 @@
     background-color: #F2F2F2;
 	border-radius: 5px;
 	box-shadow: 0 0 6px #B2B2B2;
-	display: inline-block;
-	padding: 10px 18px;
+	padding: 10px 20px;
 	position: relative;
 	vertical-align: top;
 	margin: 10px 10px;
 	border-color: #cdecb0;
-	width: 60%;
+    width: auto;
 }
-
 
 bubble2 {
     background-color: #dfeecf;
     border-radius: 5px;
     box-shadow: 0 0 6px #B2B2B2;
-    display: inline-block;
+    display: block;
     padding: 10px 18px;
     position: relative;
     vertical-align: top;
-    float: left;   
+    float: left;
+    clear: both;
+    width: auto;
     margin: 5px 45px 5px 20px; 
 	border-color: #cdecb0;
  }
@@ -75,11 +76,12 @@ bubble2 {
 
 .bubble2 {
     float: right;
-	width: 60%;
+    clear: both;
+	width: auto;
 	background-color: #dfeecf;
 	border-radius: 5px;
 	box-shadow: 0 0 6px #B2B2B2;
-	display: inline-block;
+	display: block;
 	padding: 10px 18px;
 	position: relative;
 	vertical-align: top;
