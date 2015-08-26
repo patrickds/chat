@@ -1,24 +1,8 @@
-.bubble {
-    background-color: #F2F2F2;
-    border-radius: 5px;
-    box-shadow: 0 0 6px #B2B2B2;
-    display: table;
-    padding: 10px 18px;
-    position: relative;
-    vertical-align: top;
-    float: left;
-    clear: both;
-    margin: 5px 45px 5px 20px; 
-	border-color: #cdecb0;	 
-}
-
-.bubble::before {
+.message_sent::before {
     background-color: #F2F2F2;
     content: "\00a0";
-    display: table;
     height: 16px;
     position: absolute;
-    top: 11px;
     transform:             rotate( 29deg ) skew( -35deg );
         -moz-transform:    rotate( 29deg ) skew( -35deg );
         -ms-transform:     rotate( 29deg ) skew( -35deg );
@@ -29,42 +13,27 @@
     left: -9px;
 }
 
-.bubble {
+.message_sent {
     background-color: #F2F2F2;
-	border-radius: 5px;
-	box-shadow: 0 0 6px #B2B2B2;
-	padding: 10px 20px;
-	position: relative;
-	vertical-align: top;
-	margin: 10px 10px;
 	border-color: #cdecb0;
-    width: auto;
-}
-
-bubble2 {
-    background-color: #dfeecf;
-    border-radius: 5px;
-    box-shadow: 0 0 6px #B2B2B2;
-    display: block;
-    padding: 10px 18px;
-    position: relative;
-    vertical-align: top;
+	box-shadow: 0 0 6px #B2B2B2;
+	border-radius: 5px;
+	padding: 10px 20px;
+	margin: 10px 10px;
+	vertical-align: top;
+	position: relative;
     float: left;
     clear: both;
-    width: auto;
-    margin: 5px 45px 5px 20px; 
-	border-color: #cdecb0;
- }
+}
 
-.bubble2::before {
+.message_received::before {
     float:right;
     background-color: #dfeecf;
     content: "\00a0";
     display: block;
     height: 19px;
 	position:relative;
-    left: 26px;
-	top: 11px;
+    left: 30px;
     transform:             rotate( 205deg ) skew( -35deg );
         -moz-transform:    rotate( 205deg ) skew( -35deg );
         -ms-transform:     rotate( 205deg ) skew( -35deg );
@@ -74,17 +43,14 @@ bubble2 {
     box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
 }
 
-.bubble2 {
+.message_received {
+	background-color: #dfeecf;
+	border-color: #cdecb0;
+	box-shadow: 0 0 6px #B2B2B2;
+	padding: 10px 20px;
+	margin: 10px 10px;
     float: right;
     clear: both;
-	width: auto;
-	background-color: #dfeecf;
 	border-radius: 5px;
-	box-shadow: 0 0 6px #B2B2B2;
-	display: block;
-	padding: 10px 18px;
 	position: relative;
-	vertical-align: top;
-	margin: 10px 10px;
-	border-color: #cdecb0;
 }

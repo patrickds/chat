@@ -3,10 +3,12 @@ $(document).ready(function () {
     var loginPage = $('#login_page'),
         errorLabel = $('#error_label'),
         chatPage = $('#chat_page'),
-        messages = $('#messages');
+        messages = $('#messages'),
+        soundButton = $('#sound_button');
 
     var serverUrl = 'http://192.168.10.181:2424';
     var ENTER_KEY = 13;
+    var muted = false;
 
     invalidateFormsSubmit();
     hideWhatShouldBeHidden();
@@ -41,7 +43,12 @@ $(document).ready(function () {
     function initChat(username) {
         var socket = socket = new io(serverUrl);
         var messageInput = $('#message_input');
-
+        
+        soundButton.click(function () {           
+            muted = !muted;
+            changeSoundIcon();
+        });
+        
         messageInput.keyup(function (e) {
             if (e.which != ENTER_KEY)
                 return;
@@ -115,19 +122,20 @@ $(document).ready(function () {
 
     function buildReceivedMessage(data) {
         var messageDiv = buildMessage(data);
-        messageDiv.addClass('bubble2');
+        messageDiv.addClass('message_received');
 
         return messageDiv;
     }
 
     function buildSentMessage(data) {
         var messageDiv = buildMessage(data);
-        messageDiv.addClass('bubble');
+        messageDiv.addClass('message_sent');
 
         return messageDiv;
     }
 
     function buildMessage(data) {
+
         var usernameDiv = $('<span id="username" class="span_block"/>')
             .text(data.user);
 
@@ -138,8 +146,31 @@ $(document).ready(function () {
     }
 
     function addElementIntoChat(messageDiv) {
-        messages.append(messageDiv);
+
+        var lastMessage = $('#messages li').last();
+        var lastUser = $('#messages #username').last().text();
+        var currentUser = messageDiv.children('#username').text();
+
+        if (!lastMessage.hasClass('notification') && !messageDiv.hasClass('notification') && (lastUser && lastUser == currentUser)) {
+            var newMessageSpan = messageDiv.children('#message');
+            lastMessage.append(newMessageSpan);
+        }
+        else {
+            messages.append(messageDiv);
+        }
+
         scrollToLastMessage();
+    }
+
+    function changeSoundIcon() {     
+        if (muted) {
+            soundButton.removeClass('glyphicon-volume-up');
+            soundButton.addClass('glyphicon-volume-off');
+        }
+        else {
+            soundButton.removeClass('glyphicon-volume-off');
+            soundButton.addClass('glyphicon-volume-up');
+        }
     }
 
     function notify() {
@@ -152,7 +183,7 @@ $(document).ready(function () {
     }
 
     function bleep() {
-        if (!document.hasFocus()) {
+        if (!document.hasFocus() && !muted) {
             var audio = new Audio('resources/bleep.mp3');
             audio.play();
         }

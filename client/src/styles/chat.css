@@ -33,13 +33,10 @@
 #chat_page li {
   margin: 7px 20px;
   list-style-type: none;
-  
 }
 
 .span_block{
   display: block;
-  float: left;
-  clear:both;
 }
 
 #username{
@@ -51,6 +48,8 @@
 #message{
   font-size: 14px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  word-wrap: break-word;
+  max-width: 750px; /*Wrong - parent should have max width*/
 }
 
 .notification {
@@ -63,4 +62,19 @@
   font-style: italic;
   font-size: 14px;
   font-family: Helvetica, sans-serif;
+}
+
+.sound_button:hover{
+  background-color: lightgreen;
+   -webkit-transition: background-color 1s;
+   transition: background-color 1s;
+}
+
+.sound_button {
+  border: 1px solid black;
+  border-radius: 2px;
+  display: block;
+  padding: 5px;
+  margin: 5px;
+  float: right;
 }
