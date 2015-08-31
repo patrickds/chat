@@ -3,14 +3,31 @@
     content: "\00a0";
     height: 16px;
     position: absolute;
-    transform:             rotate( 29deg ) skew( -35deg );
-        -moz-transform:    rotate( 29deg ) skew( -35deg );
-        -ms-transform:     rotate( 29deg ) skew( -35deg );
-        -o-transform:      rotate( 29deg ) skew( -35deg );
-        -webkit-transform: rotate( 29deg ) skew( -35deg );
+    transform:         rotate( 29deg ) skew( -35deg );
+    -moz-transform:    rotate( 29deg ) skew( -35deg );
+    -ms-transform:     rotate( 29deg ) skew( -35deg );
+    -o-transform:      rotate( 29deg ) skew( -35deg );
+    -webkit-transform: rotate( 29deg ) skew( -35deg );
     width:  20px;
     box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
     left: -9px;
+}
+
+.message_received::before {
+    background-color: #dfeecf;
+    box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
+    float:right;
+	position:relative;
+    display: block;
+    content: "\00a0";
+    width:  20px;
+    height: 19px;
+    left: 30px;
+    transform:         rotate( 205deg ) skew( -35deg );
+    -moz-transform:    rotate( 205deg ) skew( -35deg );
+    -ms-transform:     rotate( 205deg ) skew( -35deg );
+    -o-transform:      rotate( 205deg ) skew( -35deg );
+    -webkit-transform: rotate( 205deg ) skew( -35deg );
 }
 
 .message_sent {
@@ -24,23 +41,8 @@
 	position: relative;
     float: left;
     clear: both;
-}
-
-.message_received::before {
-    float:right;
-    background-color: #dfeecf;
-    content: "\00a0";
-    display: block;
-    height: 19px;
-	position:relative;
-    left: 30px;
-    transform:             rotate( 205deg ) skew( -35deg );
-        -moz-transform:    rotate( 205deg ) skew( -35deg );
-        -ms-transform:     rotate( 205deg ) skew( -35deg );
-        -o-transform:      rotate( 205deg ) skew( -35deg );
-        -webkit-transform: rotate( 205deg ) skew( -35deg );
-    width:  20px;
-    box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
+    max-width: 95%;
+    word-wrap: break-word;
 }
 
 .message_received {
@@ -53,4 +55,6 @@
     clear: both;
 	border-radius: 5px;
 	position: relative;
+    max-width: 95%;
+    word-wrap: break-word;
 }
