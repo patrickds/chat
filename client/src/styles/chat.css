@@ -4,7 +4,7 @@
   padding: 10px;
 }
 
-#chat_page ul {
+#messages {
   position: absolute;
   left: 0;
   right: 0;
@@ -35,21 +35,20 @@
   list-style-type: none;
 }
 
-.span_block{
-  display: block;
-}
-
-#username{
+#username {
   font-size: 12px;
   font-weight: bold;
-  font-family: sans-serif
+  font-family: sans-serif;
 }
 
-#message{
+#username:after {
+  content: ":"
+}
+
+#message {
   font-size: 14px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  word-wrap: break-word;
-  max-width: 750px; /*Wrong - parent should have max width*/
+  display: block;
 }
 
 .notification {
@@ -66,8 +65,11 @@
 
 .sound_button:hover{
   background-color: lightgreen;
-   -webkit-transition: background-color 1s;
-   transition: background-color 1s;
+   transition: background-color 0.7s;
+   -o-transition: background-color 0.7s;
+   -ms-transition: background-color 0.7s;
+   -moz-transition: background-color 0.7s;
+   -webkit-transition: background-color 0.7s;
 }
 
 .sound_button {
@@ -77,4 +79,9 @@
   padding: 5px;
   margin: 5px;
   float: right;
+  transition: background-color 0.7s;
+  -o-transition: background-color 0.7s;
+  -ms-transition: background-color 0.7s;
+  -moz-transition: background-color 0.7s;
+  -webkit-transition: background-color 0.7s;
 }

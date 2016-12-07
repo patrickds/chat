@@ -4,7 +4,8 @@ $(document).ready(function () {
         errorLabel = $('#error_label'),
         chatPage = $('#chat_page'),
         messages = $('#messages'),
-        soundButton = $('#sound_button');
+        soundButton = $('#sound_button'),
+        loginForm = $('#login_page form');
 
     var serverUrl = 'localhost:2424';
     var ENTER_KEY = 13;
@@ -12,43 +13,30 @@ $(document).ready(function () {
 
     invalidateFormsSubmit();
     hideWhatShouldBeHidden();
+    var username;
+    var socket = socket = new io(serverUrl);
+
+    soundButton.click(function () {
+        muted = !muted;
+        updateSoundIcon();
+    });
     
     /************* login *****************/
 
     loginPage.keyup(function (e) {
-        if (e.which != ENTER_KEY) return;
-
-        var username = $('#username_input').val();
-
-        var loginForm = $('#login_page form');
-        if (!validateUsername(username)) {
-
-            errorLabel.fadeIn(300);
-            loginForm.addClass('has-error');
-            return;
+        if (e.which == ENTER_KEY) {
+            username = $('#username_input').val();
+            socket.emit('validate user', { user: username });
         }
-
-        errorLabel.fadeOut(300);
-        loginForm.removeClass('has-error');
-
-        initChat(username);
-
-        loginPage.fadeOut(1000, function () {
-            chatPage.fadeIn(500);
-        });
     });
+    
     /************* login *****************/
 
     /************* main chat *****************/
-    function initChat(username) {
-        var socket = socket = new io(serverUrl);
+    function initializeChat() {
+
         var messageInput = $('#message_input');
-        
-        soundButton.click(function () {           
-            muted = !muted;
-            changeSoundIcon();
-        });
-        
+
         messageInput.keyup(function (e) {
             if (e.which != ENTER_KEY)
                 return;
@@ -62,47 +50,68 @@ $(document).ready(function () {
                 resetElement($(this));
             }
         });
-        /************* main chat *****************/
-        
-        /************* Socket Events *****************/
-        socket.on('connect', function () {
-            socket.emit('user connected', { user: username });
-        });
-
-        socket.on('new user', function (data) {
-            var notificationData = { notification: 'connected', user: data.user };
-            var notificationElement = buildNotification(notificationData);
-
-            addElementIntoChat(notificationElement);
-        });
-
-        socket.on('user disconnected', function (data) {
-            var notificationData = { notification: 'disconnected', user: data.user };
-            var notificationElement = buildNotification(notificationData);
-
-            addElementIntoChat(notificationElement);
-        });
-
-        socket.on('new message', function (data) {
-            var messageDiv = buildReceivedMessage(data);
-
-            addElementIntoChat(messageDiv);
-            notify();
-        });
-        /************* Socket Events *****************/
     }
+    /************* main chat *****************/
+
+    /************* Socket Events *****************/
+
+    socket.on('valid user', function () {
+        errorLabel.fadeOut(300);
+        loginForm.removeClass('has-error');
+
+        initializeChat();
+
+        loginPage.fadeOut(1000, function () {
+            chatPage.fadeIn(500);
+        });
+
+        addUser();
+    })
+
+    socket.on('invalid user', function () {
+        showLoginError('This username already exists.')
+    })
+
+    socket.on('empty user', function () {
+        showLoginError('User cannot be empty.')
+    });
+
+    socket.on('user disconnected', function (data) {
+        var notificationData = { notification: 'disconnected', user: data.user };
+        var notificationElement = buildNotification(notificationData);
+
+        addElementIntoChat(notificationElement);
+    });
+
+    socket.on('new message', function (data) {
+        var messageDiv = buildReceivedMessage(data);
+
+        addElementIntoChat(messageDiv);
+        notify();
+    });
+
+    socket.on('reconnecting', function (count) {
+        alert('Reconnecting to server'); 
+    })
+    
+    /************* Socket Events *****************/
 
     /************* utils functions *****************/
 
-    function validateUsername(username) {
-        if (!username.trim())
-            return false;
+    function showLoginError(msg) {
+        errorLabel.text(msg);
+        errorLabel.fadeIn(300);
+        loginForm.addClass('has-error');
+    }
 
-        return true;
+    function addUser() {
+        var notificationData = { notification: 'connected', user: username };
+        var notificationElement = buildNotification(notificationData);
+
+        addElementIntoChat(notificationElement);
     }
 
     function hideWhatShouldBeHidden() {
-        errorLabel.hide();
         chatPage.hide();
         // loginPage.hide();
     }
@@ -135,18 +144,16 @@ $(document).ready(function () {
     }
 
     function buildMessage(data) {
-
-        var usernameDiv = $('<span id="username" class="span_block"/>')
+        var usernameDiv = $('<span id="username"/>')
             .text(data.user);
 
-        var messageBodyDiv = $('<span id="message" class="span_block"/>')
+        var messageBodyDiv = $('<span id="message"/>')
             .text(data.msg);
 
         return $('<li/>').append(usernameDiv).append(messageBodyDiv);
     }
 
     function addElementIntoChat(messageDiv) {
-
         var lastMessage = $('#messages li').last();
         var lastUser = $('#messages #username').last().text();
         var currentUser = messageDiv.children('#username').text();
@@ -162,7 +169,7 @@ $(document).ready(function () {
         scrollToLastMessage();
     }
 
-    function changeSoundIcon() {     
+    function updateSoundIcon() {
         if (muted) {
             soundButton.removeClass('glyphicon-volume-up');
             soundButton.addClass('glyphicon-volume-off');
