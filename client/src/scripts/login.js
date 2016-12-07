@@ -6,7 +6,7 @@ $(document).ready(function () {
         messages = $('#messages'),
         soundButton = $('#sound_button');
 
-    var serverUrl = 'http://192.168.10.181:2424';
+    var serverUrl = 'localhost:2424';
     var ENTER_KEY = 13;
     var muted = false;
 
